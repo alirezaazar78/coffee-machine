@@ -1,7 +1,7 @@
 import time
 import os  # for file
 
-# prices hard coded cuz env hard
+# prices
 espresso_p = 60
 latte_p = 80
 capp_p = 70
@@ -11,7 +11,7 @@ med_f = 1.3
 large_f = 1.6
 sugar_p = 5  
 
-prep_t = 30  # seconds
+prep_t = 10  # seconds
 order_f = "orders.txt"  # file name
 
 # menu dict
@@ -37,7 +37,7 @@ def coffee_choice():  # get coffee
         i = menu[k]
         print(k + ". " + i["name"] + " - " + str(i["price"]) + " Toman")  # print menu
     ch = input("Pick number: ")
-    if ch not in menu:  # check
+    if ch not in menu:  
         print("Wrong, espresso it is")
         ch = "1"
     return ch
@@ -58,11 +58,11 @@ def sugar_choice():  # sugar or not
     print("2. No sugar")
     ch = input("1 or 2? ")
     if ch == "1":
-        return True  # has sugar
+        return True 
     else:
         return False
 
-def wait_time(s):  # countdown simple
+def wait_time(s):  # countdown 
     print("\nPreparing...")
     for x in range(s, 0, -1):
         print(str(x) + " seconds...", end="\r")  # no fancy r
