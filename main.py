@@ -1,15 +1,16 @@
 import time
-import os  # for file
+import os  # for save order to file
 
-# prices
+# prices and factors
 espresso_p = 60
 latte_p = 80
 capp_p = 70
 caramel_p = 90
+sugar_p = 5 
 small_f = 1.0
 med_f = 1.3
 large_f = 1.6
-sugar_p = 5  
+ 
 
 prep_t = 10  # seconds
 order_f = "orders.txt"  # file name
@@ -31,27 +32,29 @@ sizes = {
 
 # functions
 
-def coffee_choice():  # get coffee
+def coffee_choice():  
     print("\nCoffee menu:")
     for k in menu:
         i = menu[k]
-        print(k + ". " + i["name"] + " - " + str(i["price"]) + " Toman")  # print menu
-    ch = input("Pick number: ")
-    if ch not in menu:  
-        print("Wrong, espresso it is")
-        ch = "1"
-    return ch
+        print(f"{k}. {i['name']} - {i['price']} Toman")  # print menu
+    while True:  
+        ch = input("Pick number: ")
+        if ch in menu:
+            return ch  
+        else:
+            print("Invalid choice! Please try again.") 
 
 def size_choice():  # size
     print("\nSize:")
     for k in sizes:
         i = sizes[k]
-        print(k + ". " + i["name"] + " x" + str(i["factor"]))
-    ch = input("Pick: ")
-    if ch not in sizes:
-        print("Small default")
-        ch = "1"
-    return ch
+        print(f"{k}. {i['name']} (x{i['factor']})")
+    while True:
+        ch = input("Pick Size number: ")
+        if ch in sizes:
+            return ch  
+        else:
+            print("Invalid choice! Please try again.")
 
 def sugar_choice():  # sugar or not
     print("\n1. Sugar +5 Toman")
@@ -62,10 +65,10 @@ def sugar_choice():  # sugar or not
     else:
         return False
 
-def wait_time(s):  # countdown 
+def wait_time(s):  # countdown simple
     print("\nPreparing...")
     for x in range(s, 0, -1):
-        print(str(x) + " seconds...", end="\r")  # no fancy r
+        print(f"{x} seconds...", end="\r")
         time.sleep(1)
     print("Ready! Enjoy")
 
@@ -75,7 +78,7 @@ def write_order(d):  # save to file
     f.close()  # close manual
 
 def do_pay(tot):  # payment fake
-    print("\nPay: " + str(tot) + " Toman")
+    print(f"\nTotal to pay: {int(tot)} Toman")
     ok = input("Yes? y/n: ")
     if ok == "y":
         print("Paying..")
@@ -87,20 +90,20 @@ def do_pay(tot):  # payment fake
         return False
 
 # main part
-print("Welcome Coffee Shop!")  # start
+print("Welcome Coffee Shop!")  
 
 total = 0  # total price
 order_list = []  # list of orders
 
 while True:  # loop for orders
-    c = coffee_choice()  # get coffee
-    s = size_choice()  # size
-    sug = sugar_choice()  # sugar
+    c = coffee_choice()  
+    s = size_choice()  
+    sug = sugar_choice()  
 
     # calc price
     cof = menu[c]  # coffee info
     sz = sizes[s]  # size info
-    price = cof["price"] * sz["factor"]  # base * factor
+    price = cof["price"] * sz["factor"] 
     if sug == True:  # add sugar
         price = price + sugar_p
 
@@ -115,20 +118,20 @@ while True:  # loop for orders
     order_list.append(summ)  # add to list
 
     more = input("\nAnother? y/n: ")
-    if more != "y":  # stop
+    if more != "y": 
         break
 
 # show order
 print("\nOrder:")
 for item in order_list:
     print("- " + item)
-print("Grand total: " + str(int(total)) + " Toman")
+print(f"Total: {int(total)} Toman")
 
 # pay
 if do_pay(total):
-    wait_time(prep_t)  # prepare
-    full_order = ", ".join(order_list) + " | Total: " + str(int(total)) + " Toman"
+    wait_time(prep_t)  
+    full_order = f"Order: {', '.join(order_list)} | Total: {int(total)} Toman"
     write_order(full_order)  # save
     print("Order saved in file")
 
-print("Bye! Come again")  # end
+print("Bye! Come again") 
