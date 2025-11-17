@@ -1,5 +1,4 @@
 import time
-import os  # for save order to file
 
 # prices and factors
 espresso_p = 60
@@ -10,7 +9,6 @@ sugar_p = 5
 small_f = 1.0
 med_f = 1.3
 large_f = 1.6
- 
 
 prep_t = 10  # seconds
 order_f = "orders.txt"  # file name
@@ -31,7 +29,6 @@ sizes = {
 }
 
 # functions
-
 def coffee_choice():  
     print("\nCoffee menu:")
     for k in menu:
@@ -74,8 +71,11 @@ def wait_time(s):  # countdown simple
 
 def write_order(d):  # save to file
     f = open(order_f, "a")  # open append
+    #with open(order_f, "a") as file:
     f.write(d + "\n")
     f.close()  # close manual
+
+
 
 def do_pay(tot):  # payment fake
     print(f"\nTotal to pay: {int(tot)} Toman")
@@ -103,7 +103,7 @@ while True:  # loop for orders
     # calc price
     cof = menu[c]  # coffee info
     sz = sizes[s]  # size info
-    price = cof["price"] * sz["factor"] 
+    price = cof["price"] * sz["factor"]  # base * factor
     if sug == True:  # add sugar
         price = price + sugar_p
 
@@ -115,10 +115,11 @@ while True:  # loop for orders
     else:
         add_t = "no sugar"
     summ = cof["name"] + " (" + sz["name"] + ", " + add_t + ") - " + str(int(price)) + " Toman"
+    #summ=f"{cof['name']} ({sz['name']}, {add_t}) - {int(price)} Toman"
     order_list.append(summ)  # add to list
 
     more = input("\nAnother? y/n: ")
-    if more != "y": 
+    if more != "y":  # stop
         break
 
 # show order
@@ -129,9 +130,10 @@ print(f"Total: {int(total)} Toman")
 
 # pay
 if do_pay(total):
-    wait_time(prep_t)  
+    wait_time(prep_t)  # prepare
     full_order = f"Order: {', '.join(order_list)} | Total: {int(total)} Toman"
+    print(full_order)
     write_order(full_order)  # save
     print("Order saved in file")
 
-print("Bye! Come again") 
+print("Bye! Come again")  # end
